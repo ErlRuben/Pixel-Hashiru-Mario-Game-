@@ -17,7 +17,7 @@ class Scene1 extends Phaser.Scene {
     const helloButton = this.add.image(710, 500, 'start');
     helloButton.setInteractive();
     helloButton.on('pointerdown', () => { 
-      this.scene.start("playGame");
+      this.scene.start("playGame1");
     });
   }
 }
