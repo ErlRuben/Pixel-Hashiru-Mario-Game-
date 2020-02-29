@@ -34,6 +34,8 @@ class Scene2 extends Phaser.Scene{
     // the player will collide with this layer
     groundLayer.setCollisionByExclusion([-1]);
 
+    levelUp = map.createDynamicLayer('next', nextLevel, 0, 0);
+
     // coin image used as tileset
     var coinTiles = map.addTilesetImage('coin');
     // add coins as tiles

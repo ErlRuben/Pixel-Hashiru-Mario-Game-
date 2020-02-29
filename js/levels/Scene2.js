@@ -1,9 +1,10 @@
 var map;
 var player;
 var cursors;
-var groundLayer, coinLayer, portalLayer;
+var groundLayer, coinLayer, next;
 var text;
 var score = 0;
+var highScore = 0;
 class Scene2 extends Phaser.Scene{
   constructor(){
     super("playGame1");
@@ -20,7 +21,8 @@ class Scene2 extends Phaser.Scene{
       this.load.image('coin', 'assets/images/coinGold.png');
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
-      this.load.image('next', 'assets/images/title.png');
+      // alert box
+      this.load.image('next', 'assets/images/tiles.png');
 
   }
   create() {
@@ -37,10 +39,13 @@ class Scene2 extends Phaser.Scene{
 
     // coin image used as tileset
     var coinTiles = map.addTilesetImage('coin');
-    //var portalTiles = map.addTilesetImage('portal');
     // add coins as tiles
     coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
-    //portalLayer = map.createDynamicLayer('Portal', portalTiles, 0, 0);
+    // alert boxes
+    var portal = map.addTilesetImage('tiles');
+    // add alert boxes
+    next = map.createDynamicLayer('next', portal, 0, 0);
+
 
     // set the boundaries of our game world
     this.physics.world.bounds.width = groundLayer.width;
@@ -57,15 +62,16 @@ class Scene2 extends Phaser.Scene{
     // player will collide with the level tiles 
     this.physics.add.collider(groundLayer, player);
 
+
     coinLayer.setTileIndexCallback(17, collectCoin, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
     this.physics.add.overlap(player, coinLayer);
 
-    /*portalLayer.setTileIndexCallback(17, collectCoin, this);
+    next.setTileIndexCallback(4, nextLevel, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
-    this.physics.add.overlap(player, portalLayer);*/
+    this.physics.add.overlap(player, next);
 
     // player walk animation
     this.anims.create({
@@ -93,12 +99,14 @@ class Scene2 extends Phaser.Scene{
     this.cameras.main.setBackgroundColor('#ccccff');
 
     // this text will show the score
-    text = this.add.text(20, 570, '0', {
+    text = this.add.text(20, 550, '0', {
         fontSize: '20px',
         fill: '#ffffff'
     });
     // fix the text to the camera
     text.setScrollFactor(0);
+ 
+    //high.setScrollFactor(0);
   }
   update(time, delta) {
     if (cursors.left.isDown)
@@ -119,22 +127,22 @@ class Scene2 extends Phaser.Scene{
     // jump 
     if (cursors.up.isDown && player.body.onFloor())
     {
-        player.body.setVelocityY(-900);        
+        player.body.setVelocityY(-500);        
     }
   }
 
 }
 function collectCoin(sprite, tile) {
-  //this.scene.start('bootGame');
   coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
   score++; // add 10 points to the score
   text.setText(score); // set the text to show the current score
+  if (highScore < score) {
+    highScore = score;
+  }
   return false;
 }
-/*function collectCoin(sprite, tile) {
+function nextLevel(sprite, tile) {
   this.scene.start('playgame');
-  portalLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
- // score++; // add 10 points to the score
-  //text.setText(score); // set the text to show the current score
+  next.removeTileAt(tile.x, tile.y);
   return false;
-}*/
+}
