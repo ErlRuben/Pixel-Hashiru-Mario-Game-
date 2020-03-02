@@ -1,9 +1,10 @@
-
+var helaaa;
 class Scene1 extends Phaser.Scene {
   constructor() {
     super("bootGame");
   }
   preload() {
+    
     // menu background
     this.load.image('bg', 'assets/images/mainbg.png');
     // game name
@@ -14,12 +15,13 @@ class Scene1 extends Phaser.Scene {
 
   }
   create() {
+   
     this.add.image(720, 300, 'bg');
     this.add.image(720, 300, 'title');
 
     //this.add.text( 100, 100, 'High Score: '+ highScore);
 
-    this.sound.play('music', {
+    helaaa = this.sound.play('music', {
       loop:true
     })
 

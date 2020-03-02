@@ -40,6 +40,7 @@ class Scene2 extends Phaser.Scene{
       //this.load.image('next', 'assets/images/polee.png');
       this.load.audio('jump', 'assets/audio/jump.mp3');
       this.load.audio('collectcoins', 'assets/audio/collectcoins.mp3');
+      this.load.audio('deat', 'assets/audio/death.mp3');
 
 
   }
@@ -57,7 +58,7 @@ class Scene2 extends Phaser.Scene{
 
     // coin image used as tileset
     var coinTiles = map.addTilesetImage('coin');
-    var waterTiles = map.addTilesetImage('coin');
+    var waterTiles = map.addTilesetImage('water');
     // add coins as tiles
     coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
     waterLayer = map.createDynamicLayer('water', waterTiles, 0, 0);
@@ -89,7 +90,7 @@ class Scene2 extends Phaser.Scene{
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
     this.physics.add.overlap(player, coinLayer);
-
+    this.physics.add.overlap(player, waterLayer);
     /*next.setTileIndexCallback(17, nextLevel, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
@@ -156,10 +157,7 @@ class Scene2 extends Phaser.Scene{
       fontSize: '50px',
       fill: '#ffffff'
     });
-    deathText = this.add.text(610, 320, '', {
-        fontSize: '50px',
-        fill: '#000' 
-    });
+   
     // fix the text to the camera
     mario.setScrollFactor(0);
     highscore.setScrollFactor(0);
@@ -173,7 +171,7 @@ class Scene2 extends Phaser.Scene{
 
     timee.setScrollFactor(0);
     timeee.setScrollFactor(0);
-    deathText.setScrollFactor(0);
+  
   }
   update(time, delta) {
     if (cursors.left.isDown)
@@ -227,10 +225,14 @@ function collectCoin(sprite, tile) {
   return false;
 }
 function waterdeath(sprite, tile) {
+  //player.body.setVelocityY(-550); 
   player.disableBody(true, false);
-  deathText.setText('Dead! Your Score ' + highscore);
+  this.sound.play('deat', {
+    loop:false
+  }) 
   return false;
 }
+
 /*function death(sprite, tile) {
   player.removeTileAt(tile.x, tile.y)
   deathText.setText('Dead! Your Score ' + highscore);
