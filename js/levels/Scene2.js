@@ -109,19 +109,19 @@ class Scene2 extends Phaser.Scene{
 
     // this text will show the score
     highscoree = this.add.text(200, 80,'X', {
-      fontSize: '20px',
+      fontSize: '30px',
       fill: '#ffffff'
     });
     highscore = this.add.text(230, 80,'0', {
-      fontSize: '20px',
+      fontSize: '30px',
       fill: '#ffffff'
     });
     textt = this.add.text(475, 80,'X', {
-      fontSize: '20px',
+      fontSize: '30px',
       fill: '#ffffff'
     });
     text = this.add.text(500, 80,'0', {
-        fontSize: '20px',
+        fontSize: '30px',
         fill: '#ffffff'
     })
     ;
