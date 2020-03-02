@@ -1,15 +1,22 @@
 var map;
 var player;
 var cursors;
-var groundLayer, coinLayer, next;
+var groundLayer, coinLayer, next, waterLayer;
 var text;
 var coin;
 var textt;
+var mario;
+var world;
+var worldd;
+var timee;
+var timeee;
+var tim;
+var deathText;
+
 var highscore;
-var highscoree;
 var score = 0;
-//var hscore = 0;
 var highScore = 0;
+var hscore = score * 10;
 class Scene2 extends Phaser.Scene{
   constructor(){
     super("playGame1");
@@ -24,6 +31,9 @@ class Scene2 extends Phaser.Scene{
       this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 50, frameHeight: 50});
       // simple coin image
       this.load.image('coin', 'assets/images/coinGold.png');
+
+      this.load.image('water', 'assets/images/water.png');
+
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
@@ -47,8 +57,10 @@ class Scene2 extends Phaser.Scene{
 
     // coin image used as tileset
     var coinTiles = map.addTilesetImage('coin');
+    var waterTiles = map.addTilesetImage('coin');
     // add coins as tiles
     coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
+    waterLayer = map.createDynamicLayer('water', waterTiles, 0, 0);
     // alert boxes
     /*var portal = map.addTilesetImage('next');
     // add alert boxes
@@ -72,6 +84,8 @@ class Scene2 extends Phaser.Scene{
 
 
     coinLayer.setTileIndexCallback(17, collectCoin, this);
+    waterLayer.setTileIndexCallback(19, waterdeath, this);
+
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
     this.physics.add.overlap(player, coinLayer);
@@ -97,7 +111,7 @@ class Scene2 extends Phaser.Scene{
 
 
     cursors = this.input.keyboard.createCursorKeys();
-    coin = this.add.image(440, 85, 'coin');
+    coin = this.add.image(450, 100, 'coin');
 
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -108,32 +122,58 @@ class Scene2 extends Phaser.Scene{
     this.cameras.main.setBackgroundColor('#ccccff');
 
     // this text will show the score
-    highscoree = this.add.text(200, 80,'X', {
-      fontSize: '30px',
+    mario = this.add.text(50, 20,'PIXEL HASHIRU', {
+      fontSize: '40px',
       fill: '#ffffff'
     });
-    highscore = this.add.text(230, 80,'0', {
-      fontSize: '30px',
+    highscore = this.add.text(50, 70,'0', {
+      fontSize: '50px',
       fill: '#ffffff'
     });
-    textt = this.add.text(475, 80,'X', {
-      fontSize: '30px',
+    textt = this.add.text(490, 80,'X', {
+      fontSize: '50px',
       fill: '#ffffff'
     });
-    text = this.add.text(500, 80,'0', {
-        fontSize: '30px',
+    text = this.add.text(540, 80,'0', {
+        fontSize: '50px',
         fill: '#ffffff'
-    })
-    ;
+    });
+    world = this.add.text(835, 20,'WORLD', {
+      fontSize: '40px',
+      fill: '#ffffff'
+    });
+    worldd = this.add.text(820, 80,'1 - 1', {
+      fontSize: '50px',
+      fill: '#ffffff'
+    });
+
+    timee = this.add.text(1180, 20,'TIME', {
+      fontSize: '40px',
+      fill: '#ffffff'
+    });
+
+    timeee = this.add.text(1182, 80,'0', {
+      fontSize: '50px',
+      fill: '#ffffff'
+    });
+    deathText = this.add.text(610, 320, '', {
+        fontSize: '50px',
+        fill: '#000' 
+    });
     // fix the text to the camera
+    mario.setScrollFactor(0);
     highscore.setScrollFactor(0);
-    highscoree.setScrollFactor(0);
 
     coin.setScrollFactor(0);
     textt.setScrollFactor(0);
     text.setScrollFactor(0);
- 
-    //high.setScrollFactor(0);
+
+    world.setScrollFactor(0);
+    worldd.setScrollFactor(0);
+
+    timee.setScrollFactor(0);
+    timeee.setScrollFactor(0);
+    deathText.setScrollFactor(0);
   }
   update(time, delta) {
     if (cursors.left.isDown)
@@ -159,6 +199,9 @@ class Scene2 extends Phaser.Scene{
           loop:false
         }) 
     }
+    tim =+ Math.round(time / 200  );
+    timeee.setText(tim);
+    player.update(time);
   }
 
 }
@@ -168,8 +211,9 @@ function collectCoin(sprite, tile) {
   //hscore += 100;
   score++; // add 10 points to the score
  
-  //highscore.setText(highScore)
+  highscore.setText(score * 100)
 
+  //if time == 300 gameover
   text.setText(score); 
   // set the text to show the current score
   
@@ -181,7 +225,18 @@ function collectCoin(sprite, tile) {
     loop:false
   }) 
   return false;
-}/*
+}
+function waterdeath(sprite, tile) {
+  player.disableBody(true, false);
+  deathText.setText('Dead! Your Score ' + highscore);
+  return false;
+}
+/*function death(sprite, tile) {
+  player.removeTileAt(tile.x, tile.y)
+  deathText.setText('Dead! Your Score ' + highscore);
+}
+
+
 function nextLevel(sprite, tile) {
   this.scene.start('playGame1');
 
