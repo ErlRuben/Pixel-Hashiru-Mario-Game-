@@ -7,22 +7,22 @@ var score = 0;
 var highScore = 0;
 class Scene2 extends Phaser.Scene{
   constructor(){
-    super("playGame");
+    super("playGame1");
     // this function will be called when the player touches a coin
 
   }
   preload() {
       
       // map made with Tiled in JSON format
-      this.load.tilemapTiledJSON('map', 'assets/maps/map.json');
+      this.load.tilemapTiledJSON('map', 'assets/maps/map1.json');
       // tiles in spritesheet 
-      this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 50, frameHeight: 50});
+      this.load.spritesheet('tiles', 'assets/images/PixelArt.png', {frameWidth: 50, frameHeight: 50});
       // simple coin image
       this.load.image('coin', 'assets/images/coinGold.png');
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
-      this.load.image('next', 'assets/images/coinGold.png');
+      //this.load.image('next', 'assets/images/polee.png');
 
   }
   create() {
@@ -52,7 +52,7 @@ class Scene2 extends Phaser.Scene{
     this.physics.world.bounds.height = groundLayer.height;
 
     // create the player sprite    
-    player = this.physics.add.sprite(200, 200, 'player');
+    player = this.physics.add.sprite(200, 300, 'player');
     player.setBounce(0.05); // our player will bounce from items
     player.setCollideWorldBounds(true); // don't go out of the map    
     
@@ -68,7 +68,7 @@ class Scene2 extends Phaser.Scene{
     // will be called    
     this.physics.add.overlap(player, coinLayer);
 
-    /*next.setTileIndexCallback(4, nextLevel, this);
+    /*next.setTileIndexCallback(17, nextLevel, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
     this.physics.add.overlap(player, next);*/
@@ -133,7 +133,6 @@ class Scene2 extends Phaser.Scene{
 
 }
 function collectCoin(sprite, tile) {
-  this.scene.start('playGame1');
 
   coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
   score++; // add 10 points to the score
@@ -144,6 +143,8 @@ function collectCoin(sprite, tile) {
   return false;
 }/*
 function nextLevel(sprite, tile) {
+  this.scene.start('playGame1');
+
   next.removeTileAt(tile.x, tile.y);
   return false;
 }*/

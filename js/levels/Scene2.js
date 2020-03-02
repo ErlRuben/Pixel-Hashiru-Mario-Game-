@@ -22,7 +22,9 @@ class Scene2 extends Phaser.Scene{
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
-      this.load.image('next', 'assets/images/tiles.png');
+      //this.load.image('next', 'assets/images/polee.png');
+      this.load.audio('music', 'assets/audio/mainmenu.mp3');
+
 
   }
   create() {
@@ -42,9 +44,9 @@ class Scene2 extends Phaser.Scene{
     // add coins as tiles
     coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
     // alert boxes
-    var portal = map.addTilesetImage('tiles');
+    /*var portal = map.addTilesetImage('next');
     // add alert boxes
-    next = map.createDynamicLayer('next', portal, 0, 0);
+    next = map.createDynamicLayer('next', portal, 0, 0);*/
 
 
     // set the boundaries of our game world
@@ -52,8 +54,8 @@ class Scene2 extends Phaser.Scene{
     this.physics.world.bounds.height = groundLayer.height;
 
     // create the player sprite    
-    player = this.physics.add.sprite(200, 200, 'player');
-    player.setBounce(0.2); // our player will bounce from items
+    player = this.physics.add.sprite(200, 800, 'player');
+    player.setBounce(0.01); // our player will bounce from items
     player.setCollideWorldBounds(true); // don't go out of the map    
     
     // small fix to our player images, we resize the physics body object slightly
@@ -68,10 +70,10 @@ class Scene2 extends Phaser.Scene{
     // will be called    
     this.physics.add.overlap(player, coinLayer);
 
-    next.setTileIndexCallback(4, nextLevel, this);
+    /*next.setTileIndexCallback(17, nextLevel, this);
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
-    this.physics.add.overlap(player, next);
+    this.physics.add.overlap(player, next);*/
 
     // player walk animation
     this.anims.create({
@@ -127,12 +129,16 @@ class Scene2 extends Phaser.Scene{
     // jump 
     if (cursors.up.isDown && player.body.onFloor())
     {
-        player.body.setVelocityY(-500);        
+        player.body.setVelocityY(-550);       
+        this.sound.play('music', {
+          loop:false
+        }) 
     }
   }
 
 }
 function collectCoin(sprite, tile) {
+
   coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
   score++; // add 10 points to the score
   text.setText(score); // set the text to show the current score
@@ -140,9 +146,10 @@ function collectCoin(sprite, tile) {
     highScore = score;
   }
   return false;
-}
+}/*
 function nextLevel(sprite, tile) {
-  this.scene.start('playgame');
+  this.scene.start('playGame1');
+
   next.removeTileAt(tile.x, tile.y);
   return false;
-}
+}*/
