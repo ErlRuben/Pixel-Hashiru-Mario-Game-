@@ -17,7 +17,7 @@ class Scene1 extends Phaser.Scene {
     this.add.image(720, 300, 'bg');
     this.add.image(720, 300, 'title');
 
-    this.add.text( 100, 100, 'High Score: '+ highScore);
+    //this.add.text( 100, 100, 'High Score: '+ highScore);
 
     this.sound.play('music', {
       loop:true

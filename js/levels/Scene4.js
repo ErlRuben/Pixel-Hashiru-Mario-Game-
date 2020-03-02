@@ -3,6 +3,8 @@ var player;
 var cursors;
 var groundLayer, coinLayer, next;
 var text;
+var highscore;
+var highscoree;
 var score = 0;
 var highScore = 0;
 class Scene2 extends Phaser.Scene{

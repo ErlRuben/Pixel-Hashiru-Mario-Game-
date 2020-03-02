@@ -3,7 +3,12 @@ var player;
 var cursors;
 var groundLayer, coinLayer, next;
 var text;
+var coin;
+var textt;
+var highscore;
+var highscoree;
 var score = 0;
+//var hscore = 0;
 var highScore = 0;
 class Scene2 extends Phaser.Scene{
   constructor(){
@@ -23,7 +28,8 @@ class Scene2 extends Phaser.Scene{
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
       //this.load.image('next', 'assets/images/polee.png');
-      this.load.audio('music', 'assets/audio/mainmenu.mp3');
+      this.load.audio('jump', 'assets/audio/jump.mp3');
+      this.load.audio('collectcoins', 'assets/audio/collectcoins.mp3');
 
 
   }
@@ -91,6 +97,7 @@ class Scene2 extends Phaser.Scene{
 
 
     cursors = this.input.keyboard.createCursorKeys();
+    coin = this.add.image(440, 85, 'coin');
 
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -101,11 +108,29 @@ class Scene2 extends Phaser.Scene{
     this.cameras.main.setBackgroundColor('#ccccff');
 
     // this text will show the score
-    text = this.add.text(20, 550, '0', {
+    highscoree = this.add.text(200, 80,'X', {
+      fontSize: '20px',
+      fill: '#ffffff'
+    });
+    highscore = this.add.text(230, 80,'0', {
+      fontSize: '20px',
+      fill: '#ffffff'
+    });
+    textt = this.add.text(475, 80,'X', {
+      fontSize: '20px',
+      fill: '#ffffff'
+    });
+    text = this.add.text(500, 80,'0', {
         fontSize: '20px',
         fill: '#ffffff'
-    });
+    })
+    ;
     // fix the text to the camera
+    highscore.setScrollFactor(0);
+    highscoree.setScrollFactor(0);
+
+    coin.setScrollFactor(0);
+    textt.setScrollFactor(0);
     text.setScrollFactor(0);
  
     //high.setScrollFactor(0);
@@ -130,7 +155,7 @@ class Scene2 extends Phaser.Scene{
     if (cursors.up.isDown && player.body.onFloor())
     {
         player.body.setVelocityY(-550);       
-        this.sound.play('music', {
+        this.sound.play('jump', {
           loop:false
         }) 
     }
@@ -140,11 +165,21 @@ class Scene2 extends Phaser.Scene{
 function collectCoin(sprite, tile) {
 
   coinLayer.removeTileAt(tile.x, tile.y); // remove the tile/coin
+  //hscore += 100;
   score++; // add 10 points to the score
-  text.setText(score); // set the text to show the current score
-  if (highScore < score) {
-    highScore = score;
-  }
+ 
+  //highscore.setText(highScore)
+
+  text.setText(score); 
+  // set the text to show the current score
+  
+  /*if (highScore < score) {
+   
+      highScore = score;
+  }*/
+  this.sound.play('collectcoins', {
+    loop:false
+  }) 
   return false;
 }/*
 function nextLevel(sprite, tile) {
