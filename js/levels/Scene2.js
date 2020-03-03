@@ -74,7 +74,7 @@ class Scene2 extends Phaser.Scene{
 
     // create the player sprite    
     player = this.physics.add.sprite(200, 800, 'player');
-    player.setBounce(0.01); // our player will bounce from items
+    player.setBounce(0.01 ); // our player will bounce from items
     player.setCollideWorldBounds(true); // don't go out of the map    
     
     // small fix to our player images, we resize the physics body object slightly
@@ -113,7 +113,7 @@ class Scene2 extends Phaser.Scene{
 
     cursors = this.input.keyboard.createCursorKeys();
     coin = this.add.image(450, 100, 'coin');
-
+    //this.debug.cameraInfo(this.camera, 500, 32);
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     // make the camera follow the player
@@ -225,9 +225,11 @@ function collectCoin(sprite, tile) {
   return false;
 }
 function waterdeath(sprite, tile) {
+  //this.camera.flash(0x00ff00, 500);
+  //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
   //player.body.setVelocityY(-550); 
   player.disableBody(true, false);
-  this.sound.play('deat', {
+  this.sound.play('music', {
     loop:false
   }) 
   return false;
