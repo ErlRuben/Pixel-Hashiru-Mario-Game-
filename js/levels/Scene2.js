@@ -37,7 +37,7 @@ class Scene2 extends Phaser.Scene{
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
-      //this.load.image('next', 'assets/images/polee.png');
+      this.load.image('polee', 'assets/images/polee.png');
       this.load.audio('jump', 'assets/audio/jump.mp3');
       this.load.audio('collectcoins', 'assets/audio/collectcoins.mp3');
       this.load.audio('deat', 'assets/audio/death.mp3');
@@ -63,9 +63,9 @@ class Scene2 extends Phaser.Scene{
     coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
     waterLayer = map.createDynamicLayer('water', waterTiles, 0, 0);
     // alert boxes
-    /*var portal = map.addTilesetImage('next');
+    var portal = map.addTilesetImage('polee');
     // add alert boxes
-    next = map.createDynamicLayer('next', portal, 0, 0);*/
+    next = map.createDynamicLayer('next', portal, 0, 0);
 
 
     // set the boundaries of our game world
@@ -91,10 +91,11 @@ class Scene2 extends Phaser.Scene{
     // will be called    
     this.physics.add.overlap(player, coinLayer);
     this.physics.add.overlap(player, waterLayer);
-    /*next.setTileIndexCallback(17, nextLevel, this);
-    // when the player overlaps with a tile with index 17, collectCoin 
+
+    next.setTileIndexCallback(18, nextLevel, this);
+    // when the player overlaps with a tile with index 18, nextLevel 
     // will be called    
-    this.physics.add.overlap(player, next);*/
+    this.physics.add.overlap(player, next);
 
     // player walk animation
     this.anims.create({
@@ -176,13 +177,13 @@ class Scene2 extends Phaser.Scene{
   update(time, delta) {
     if (cursors.left.isDown)
     {
-        player.body.setVelocityX(-200);
+        player.body.setVelocityX(-250);
         player.anims.play('walk', true); // walk left
         player.flipX = true; // flip the sprite to the left
     }
     else if (cursors.right.isDown)
     {
-        player.body.setVelocityX(200);
+        player.body.setVelocityX(250);
         player.anims.play('walk', true);
         player.flipX = false; // use the original sprite looking to the right
     } else {
@@ -192,7 +193,7 @@ class Scene2 extends Phaser.Scene{
     // jump 
     if (cursors.up.isDown && player.body.onFloor())
     {
-        player.body.setVelocityY(-550);       
+        player.body.setVelocityY(-800);       
         this.sound.play('jump', {
           loop:false
         }) 
@@ -229,21 +230,18 @@ function waterdeath(sprite, tile) {
   //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
   //player.body.setVelocityY(-550); 
   player.disableBody(true, false);
-  this.sound.play('music', {
+  this.sound.play('deat', {
     loop:false
   }) 
   return false;
 }
 
-/*function death(sprite, tile) {
-  player.removeTileAt(tile.x, tile.y)
+function death(sprite) {
   deathText.setText('Dead! Your Score ' + highscore);
 }
 
-
-function nextLevel(sprite, tile) {
-  this.scene.start('playGame1');
-
-  next.removeTileAt(tile.x, tile.y);
+// Next Scene Function
+function nextLevel(sprite) {
+  this.scene.start('playGame');
   return false;
-}*/
+}

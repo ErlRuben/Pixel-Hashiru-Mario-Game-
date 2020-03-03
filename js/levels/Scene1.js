@@ -10,7 +10,6 @@ class Scene1 extends Phaser.Scene {
     // game name
     this.load.image('title', 'assets/images/title.png');
     this.load.image('start', 'assets/images/start.png');
-
     this.load.audio('music', 'assets/audio/mainmenu.mp3');
 
   }
