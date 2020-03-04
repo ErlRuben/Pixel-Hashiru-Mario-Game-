@@ -226,6 +226,7 @@ function collectCoin(sprite, tile) {
   return false;
 }
 function waterdeath(sprite, tile) {
+  this.scene.start('deathGame');
   //this.camera.flash(0x00ff00, 500);
   //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
   //player.body.setVelocityY(-550); 
