@@ -1,22 +1,4 @@
-var map;
-var player;
-var cursors;
-var groundLayer, coinLayer, next, waterLayer;
-var text;
-var coin;
-var textt;
-var mario;
-var world;
-var worldd;
-var timee;
-var timeee;
-var tim;
-var deathText;
 
-var highscore;
-var score = 0;
-var highScore = 0;
-var hscore = score * 10;
 class Scene2 extends Phaser.Scene{
   constructor(){
     super("playGame1");
@@ -33,21 +15,21 @@ class Scene2 extends Phaser.Scene{
       this.load.image('coin', 'assets/images/coinGold.png');
 
       this.load.image('water', 'assets/images/water.png');
-
+      this.load.image('hart', 'assets/images/pepol.png');
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
       this.load.image('polee', 'assets/images/polee.png');
       this.load.audio('jump', 'assets/audio/jump.mp3');
       this.load.audio('collectcoins', 'assets/audio/collectcoins.mp3');
-      this.load.audio('deat', 'assets/audio/death.mp3');
+      this.load.audio('deat', 'assets/audio/died.mp3');
 
 
   }
   create() {
     // load the map 
     map = this.make.tilemap({key: 'map'});
-
+   
 
     // tiles for the ground layer
     var groundTiles = map.addTilesetImage('tiles');
@@ -74,7 +56,7 @@ class Scene2 extends Phaser.Scene{
 
     // create the player sprite    
     player = this.physics.add.sprite(200, 800, 'player');
-    player.setBounce(0.01 ); // our player will bounce from items
+    player.setBounce(0.05 ); // our player will bounce from items
     player.setCollideWorldBounds(true); // don't go out of the map    
     
     // small fix to our player images, we resize the physics body object slightly
@@ -114,6 +96,7 @@ class Scene2 extends Phaser.Scene{
 
     cursors = this.input.keyboard.createCursorKeys();
     coin = this.add.image(450, 100, 'coin');
+    pepol = this.add.image(410, 37, 'hart');
     //this.debug.cameraInfo(this.camera, 500, 32);
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -158,12 +141,28 @@ class Scene2 extends Phaser.Scene{
       fontSize: '50px',
       fill: '#ffffff'
     });
+    livesText = this.add.text(440, 25,'X ' + lives, {
+      fontSize: '30px',
+      fill: '#ffffff'
+    });
+    
+    // liveText = this.add.text(1182, 80,' X'+lives, {
+    //   fontSize: '50px',
+    //   fill: '#ffffff'
+    // });
+   
+    // livesText.anchor.set(1,0);
+    // lifeLostText = this.add.text(this.world.width*0.5, this.world.height*0.5, 'Life lost, click to continue', { font: '18px Arial', fill: '#0095DD' });
+    // lifeLostText.anchor.set(0.5);
+    // lifeLostText.visible = false;
+
    
     // fix the text to the camera
     mario.setScrollFactor(0);
     highscore.setScrollFactor(0);
 
     coin.setScrollFactor(0);
+    pepol.setScrollFactor(0);
     textt.setScrollFactor(0);
     text.setScrollFactor(0);
 
@@ -172,18 +171,19 @@ class Scene2 extends Phaser.Scene{
 
     timee.setScrollFactor(0);
     timeee.setScrollFactor(0);
+    livesText.setScrollFactor(0);
   
   }
   update(time, delta) {
     if (cursors.left.isDown)
     {
-        player.body.setVelocityX(-250);
+        player.body.setVelocityX(-280);
         player.anims.play('walk', true); // walk left
         player.flipX = true; // flip the sprite to the left
     }
     else if (cursors.right.isDown)
     {
-        player.body.setVelocityX(250);
+        player.body.setVelocityX(280);
         player.anims.play('walk', true);
         player.flipX = false; // use the original sprite looking to the right
     } else {
@@ -193,7 +193,7 @@ class Scene2 extends Phaser.Scene{
     // jump 
     if (cursors.up.isDown && player.body.onFloor())
     {
-        player.body.setVelocityY(-800);       
+        player.body.setVelocityY(-790);       
         this.sound.play('jump', {
           loop:false
         }) 
@@ -226,7 +226,9 @@ function collectCoin(sprite, tile) {
   return false;
 }
 function waterdeath(sprite, tile) {
-  this.scene.start('deathGame');
+  
+  lives = lives - 0.5;
+  this.scene.start('playGame1');
   //this.camera.flash(0x00ff00, 500);
   //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
   //player.body.setVelocityY(-550); 
@@ -234,7 +236,13 @@ function waterdeath(sprite, tile) {
   this.sound.play('deat', {
     loop:false
   }) 
+  
+  if(lives == 0){
+    this.scene.start('deathGame');
+   
+  }
   return false;
+
 }
 
 function death(sprite) {
