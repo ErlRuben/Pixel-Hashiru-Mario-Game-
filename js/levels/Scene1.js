@@ -30,9 +30,7 @@ class Scene1 extends Phaser.Scene {
         loop:true
       }) 
       this.scene.start("playGame1");
-      
-
+      lives = 3;
     });
   }
 }
-

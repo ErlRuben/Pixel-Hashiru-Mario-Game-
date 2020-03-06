@@ -198,7 +198,7 @@ class Scene2 extends Phaser.Scene{
           loop:false
         }) 
     }
-    tim =+ Math.round(time / 200  );
+    tim =+ Math.round(time / 1000  );
     timeee.setText(tim);
     player.update(time);
   }
@@ -226,24 +226,26 @@ function collectCoin(sprite, tile) {
   return false;
 }
 function waterdeath(sprite, tile) {
-  
   lives = lives - 0.5;
   this.scene.start('playGame1');
   //this.camera.flash(0x00ff00, 500);
   //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
   //player.body.setVelocityY(-550); 
   player.disableBody(true, false);
-  this.sound.play('deat', {
+  this.sound.stop('play', {
     loop:false
   }) 
+
   
+
   if(lives == 0){
     this.scene.start('deathGame');
-   
   }
   return false;
 
 }
+
+
 
 function death(sprite) {
   deathText.setText('Dead! Your Score ' + highscore);

@@ -9,7 +9,7 @@ var config = {
             debug: false
         }
     },
-  scene: [Scene1, Scene2, SceneDeath]
+  scene: [Scene1, Scene2, deathScreen]
 }
 
 
@@ -17,9 +17,10 @@ var game = new Phaser.Game(config);
 var map, map2;
 var player, player2;
 var cursors;
-var groundLayer, coinLayer, next, waterLayer, groundLayer2, coinLayer2, next2, waterLayer2;
+var groundLayer, coinLayer, next, waterLayer, groundLayer2, coinLayer2, next2, waterLayer2,
+groundLayer3, coinLayer3, next3, waterLayer3;
 var text;
-var coin, coin2;
+var coin, coin2, coin3;
 var textt;
 var pepol;
 var mario;
@@ -36,5 +37,5 @@ var highscore;
 var score = 0;
 var highScore = 0;
 var hscore = score * 10;
-var lives = 3;
+var lives = 0;
 
