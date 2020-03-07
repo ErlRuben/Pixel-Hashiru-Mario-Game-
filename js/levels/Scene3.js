@@ -8,45 +8,47 @@ class Scene3 extends Phaser.Scene{
   preload() {
       
       // map made with Tiled in JSON format
-      this.load.tilemapTiledJSON('map', 'assets/maps/map1.json');
+      this.load.tilemapTiledJSON('map2', 'assets/maps/map2.json');
       // tiles in spritesheet 
       this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 50, frameHeight: 50});
       // simple coin image
       this.load.image('coin', 'assets/images/coinGold.png');
 
       this.load.image('water', 'assets/images/water.png');
-      
+      this.load.image('hart', 'assets/images/pepol.png');
       // player animations
       this.load.atlas('player', 'assets/sprites/player.png', 'assets/sprites/player.json');
       // alert box
       this.load.image('polee', 'assets/images/polee.png');
+      // audio upload
       this.load.audio('jump', 'assets/audio/jump.mp3');
       this.load.audio('collectcoins', 'assets/audio/collectcoins.mp3');
-      this.load.audio('deat', 'assets/audio/death.mp3');
+      this.load.audio('deat', 'assets/audio/died.mp3');
+
 
   }
   create() {
     // load the map 
-    map = this.make.tilemap({key: 'map'});
-
+    map = this.make.tilemap({key: 'map2'});
+   
 
     // tiles for the ground layer
-    var groundTiles = map.addTilesetImage('tiles');
+    var groundTiles2 = map.addTilesetImage('tiles');
     // create the ground layer
-    groundLayer = map.createDynamicLayer('World', groundTiles, 0, 0);
+    groundLayer = map.createDynamicLayer('world1', groundTiles2, 0, 0);
     // the player will collide with this layer
     groundLayer.setCollisionByExclusion([-1]);
 
     // coin image used as tileset
-    var coinTiles = map.addTilesetImage('coin');
-    var waterTiles = map.addTilesetImage('water');
+    var coinTiles2 = map.addTilesetImage('coin');
+    var waterTiles2 = map.addTilesetImage('water');
     // add coins as tiles
-    coinLayer = map.createDynamicLayer('Coins', coinTiles, 0, 0);
-    waterLayer = map.createDynamicLayer('water', waterTiles, 0, 0);
+    coinLayer = map.createDynamicLayer('coins1', coinTiles2, 0, 0);
+    waterLayer = map.createDynamicLayer('water1', waterTiles2, 0, 0);
     // alert boxes
-    var portal = map.addTilesetImage('polee');
+    var portal2 = map.addTilesetImage('polee');
     // add alert boxes
-    next = map.createDynamicLayer('next', portal, 0, 0);
+    next = map.createDynamicLayer('next1', portal2, 0, 0);
 
 
     // set the boundaries of our game world
@@ -94,7 +96,8 @@ class Scene3 extends Phaser.Scene{
 
 
     cursors = this.input.keyboard.createCursorKeys();
-    coin = this.add.image(450, 100, 'coin');
+    coin = this.add.image(450, 100, 'coin2');
+    pepol = this.add.image(410, 37, 'hart');
     //this.debug.cameraInfo(this.camera, 500, 32);
     // set bounds so the camera won't go outside the game world
     this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
@@ -125,7 +128,7 @@ class Scene3 extends Phaser.Scene{
       fontSize: '40px',
       fill: '#ffffff'
     });
-    worldd = this.add.text(820, 80,'1 - 1', {
+    worldd = this.add.text(820, 80,'1 - 2', {
       fontSize: '50px',
       fill: '#ffffff'
     });
@@ -139,12 +142,17 @@ class Scene3 extends Phaser.Scene{
       fontSize: '50px',
       fill: '#ffffff'
     });
+    livesText = this.add.text(440, 25,'X ' + lives, {
+      fontSize: '30px',
+      fill: '#ffffff'
+    });
    
     // fix the text to the camera
     mario.setScrollFactor(0);
     highscore.setScrollFactor(0);
 
     coin.setScrollFactor(0);
+    pepol.setScrollFactor(0);
     textt.setScrollFactor(0);
     text.setScrollFactor(0);
 
@@ -153,6 +161,7 @@ class Scene3 extends Phaser.Scene{
 
     timee.setScrollFactor(0);
     timeee.setScrollFactor(0);
+    livesText.setScrollFactor(0);
   
   }
   update(time, delta) {
@@ -179,7 +188,7 @@ class Scene3 extends Phaser.Scene{
           loop:false
         }) 
     }
-    tim =+ Math.round(time / 200  );
+    tim =+ Math.round(time / 1000  );
     timeee.setText(tim);
     player.update(time);
   }
@@ -192,45 +201,47 @@ function collectCoin(sprite, tile) {
   score++; // add 10 points to the score
  
   highscore.setText(score * 100)
+  if (highScore < highscore) {
+    highScore = highscore;
+  }
 
   //if time == 300 gameover
   text.setText(score); 
   // set the text to show the current score
-  
-  /*if (highScore < score) {
-   
-      highScore = score;
-  }*/
+
   this.sound.play('collectcoins', {
     loop:false
   }) 
   return false;
 }
 function waterdeath(sprite, tile) {
+  lives = lives - 0.5;
+  
+  if(lives == 1){
+    this.scene.start('playGame');
+  }
+  if(lives == 2){
+    this.scene.start('playGame');
+  }
+  if(lives == 3){
+    this.scene.start('playGame');
+  }
+  if(lives == 0){
+    score = score - score;
+    highscore = highscore - 100;
+    this.scene.start('deathGame');
+  }
 
-  //this.camera.flash(0x00ff00, 500);
-  //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
-  //player.body.setVelocityY(-550); 
   player.disableBody(true, false);
   this.sound.play('deat', {
     loop:false
   }) 
-  if (waterLayer.setTileIndexCallback(19, waterdeath, this)){
-    lives = lives - 1;
-    this.scene.start('playGame1');
-  }
-  else if(lives == 0){
-    this.scene.start('deathGame');
-  }
-  return false;
-}
 
-function death(sprite) {
-  deathText.setText('Dead! Your Score ' + highscore);
+  return false;
 }
 
 // Next Scene Function
 function nextLevel(sprite) {
-  this.scene.start('playGame');
+  this.scene.start('deathGame');
   return false;
 }

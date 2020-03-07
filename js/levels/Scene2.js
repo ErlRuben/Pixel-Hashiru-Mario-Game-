@@ -8,7 +8,7 @@ class Scene2 extends Phaser.Scene{
   preload() {
       
       // map made with Tiled in JSON format
-      this.load.tilemapTiledJSON('map', 'assets/maps/map1.json');
+      this.load.tilemapTiledJSON('map1', 'assets/maps/map1.json');
       // tiles in spritesheet 
       this.load.spritesheet('tiles', 'assets/images/tiles.png', {frameWidth: 50, frameHeight: 50});
       // simple coin image
@@ -28,7 +28,7 @@ class Scene2 extends Phaser.Scene{
   }
   create() {
     // load the map 
-    map = this.make.tilemap({key: 'map'});
+    map = this.make.tilemap({key: 'map1'});
    
 
     // tiles for the ground layer
@@ -67,14 +67,14 @@ class Scene2 extends Phaser.Scene{
 
 
     coinLayer.setTileIndexCallback(17, collectCoin, this);
-    waterLayer.setTileIndexCallback(19, waterdeath, this);
+    waterLayer.setTileIndexCallback(19, waterdeath1, this);
 
     // when the player overlaps with a tile with index 17, collectCoin 
     // will be called    
     this.physics.add.overlap(player, coinLayer);
     this.physics.add.overlap(player, waterLayer);
 
-    next.setTileIndexCallback(18, nextLevel, this);
+    next.setTileIndexCallback(18, nextLevel1, this);
     // when the player overlaps with a tile with index 18, nextLevel 
     // will be called    
     this.physics.add.overlap(player, next);
@@ -145,17 +145,6 @@ class Scene2 extends Phaser.Scene{
       fontSize: '30px',
       fill: '#ffffff'
     });
-    
-    // liveText = this.add.text(1182, 80,' X'+lives, {
-    //   fontSize: '50px',
-    //   fill: '#ffffff'
-    // });
-   
-    // livesText.anchor.set(1,0);
-    // lifeLostText = this.add.text(this.world.width*0.5, this.world.height*0.5, 'Life lost, click to continue', { font: '18px Arial', fill: '#0095DD' });
-    // lifeLostText.anchor.set(0.5);
-    // lifeLostText.visible = false;
-
    
     // fix the text to the camera
     mario.setScrollFactor(0);
@@ -211,48 +200,47 @@ function collectCoin(sprite, tile) {
   score++; // add 10 points to the score
  
   highscore.setText(score * 100)
+  if (highScore < highscore) {
+    highScore = highscore;
+  }
 
   //if time == 300 gameover
   text.setText(score); 
   // set the text to show the current score
-  
-  /*if (highScore < score) {
-   
-      highScore = score;
-  }*/
+
   this.sound.play('collectcoins', {
     loop:false
   }) 
   return false;
 }
-function waterdeath(sprite, tile) {
+function waterdeath1(sprite, tile) {
   lives = lives - 0.5;
-  this.scene.start('playGame1');
-  //this.camera.flash(0x00ff00, 500);
-  //this.camera.shake(0.02, 250, true, Phaser.Camera.SHAKE_VERTICAL);
-  //player.body.setVelocityY(-550); 
+  
+  if(lives == 1){
+    this.scene.start('playGame1');
+  }
+  if(lives == 2){
+    this.scene.start('playGame1');
+  }
+  if(lives == 3){
+    this.scene.start('playGame1');
+  }
+  if(lives == 0){
+    score = score - score;
+    highscore = highscore - 100;
+    this.scene.start('deathGame');
+  }
+
   player.disableBody(true, false);
-  this.sound.stop('play', {
+  this.sound.play('deat', {
     loop:false
   }) 
 
-  
-
-  if(lives == 0){
-    this.scene.start('deathGame');
-  }
   return false;
-
-}
-
-
-
-function death(sprite) {
-  deathText.setText('Dead! Your Score ' + highscore);
 }
 
 // Next Scene Function
-function nextLevel(sprite) {
+function nextLevel1(sprite) {
   this.scene.start('playGame');
   return false;
 }
