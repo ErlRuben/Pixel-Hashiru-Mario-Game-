@@ -1,4 +1,5 @@
-class deathScreen extends Phaser.Scene {
+
+class SceneDeath extends Phaser.Scene {
   constructor() {
     super("deathGame");
   }
@@ -17,18 +18,21 @@ class deathScreen extends Phaser.Scene {
   create() {
    
     this.add.image(720, 300, 'bg');
+    this.add.image(665, 450, 'hart');
 
+    this.add.text(690, 440,'X ' + lives, {
+      fontSize: '30px',
+      fill: '#ffffff'
+    })
     this.add.text(470, 300,'You DIED', {
       fontSize: '100px',
       fontStyle: 'bold',
       fill: '#ffffff'
-    });
-
-    
+    })
 
     this.sound.play('deatt', {
       loop:false
-    });
+    })
     
     const retry = this.add.text(600, 500, 'Retry',{
       fontSize: '70px',
@@ -36,8 +40,12 @@ class deathScreen extends Phaser.Scene {
       fill: '#ffffff'
     });
     retry.setInteractive();
-    retry.on('pointerdown', () => {
-      this.scene.start("bootGame");
+    retry.on('pointerdown', () => { 
+      if (retry){
+        
+        this.scene.start("bootGame");
+      }
+      
     });
   }
 }

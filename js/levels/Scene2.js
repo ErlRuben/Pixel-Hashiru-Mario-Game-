@@ -29,7 +29,9 @@ class Scene2 extends Phaser.Scene{
   create() {
     // load the map 
     map = this.make.tilemap({key: 'map1'});
-   
+    this.sound.play('collectcoins', {
+      loop:false
+    }) 
 
     // tiles for the ground layer
     var groundTiles = map.addTilesetImage('tiles');
@@ -111,7 +113,7 @@ class Scene2 extends Phaser.Scene{
       fontSize: '40px',
       fill: '#ffffff'
     });
-    highscore = this.add.text(50, 70,'0', {
+    highscore = this.add.text(50, 70, score * 100, {
       fontSize: '50px',
       fill: '#ffffff'
     });
@@ -119,7 +121,7 @@ class Scene2 extends Phaser.Scene{
       fontSize: '50px',
       fill: '#ffffff'
     });
-    text = this.add.text(540, 80,'0', {
+    text = this.add.text(540, 80,score, {
         fontSize: '50px',
         fill: '#ffffff'
     });
@@ -166,13 +168,13 @@ class Scene2 extends Phaser.Scene{
   update(time, delta) {
     if (cursors.left.isDown)
     {
-        player.body.setVelocityX(-280);
+        player.body.setVelocityX(-480);
         player.anims.play('walk', true); // walk left
         player.flipX = true; // flip the sprite to the left
     }
     else if (cursors.right.isDown)
     {
-        player.body.setVelocityX(280);
+        player.body.setVelocityX(480);
         player.anims.play('walk', true);
         player.flipX = false; // use the original sprite looking to the right
     } else {
@@ -190,6 +192,11 @@ class Scene2 extends Phaser.Scene{
     tim =+ Math.round(time / 1000  );
     timeee.setText(tim);
     player.update(time);
+    if(tim == 100){
+      
+      this.scene.start('deathGame');
+     
+    }
   }
 
 }
@@ -199,10 +206,8 @@ function collectCoin(sprite, tile) {
   //hscore += 100;
   score++; // add 10 points to the score
  
-  highscore.setText(score * 100)
-  if (highScore < highscore) {
-    highScore = highscore;
-  }
+  highscore.setText(score * 100);
+  
 
   //if time == 300 gameover
   text.setText(score); 
@@ -217,6 +222,8 @@ function waterdeath1(sprite, tile) {
   lives = lives - 0.5;
   
   if(lives == 1){
+    score = score
+    highscore = highscore;
     this.scene.start('playGame1');
   }
   if(lives == 2){

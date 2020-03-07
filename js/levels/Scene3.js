@@ -167,13 +167,13 @@ class Scene3 extends Phaser.Scene{
   update(time, delta) {
     if (cursors.left.isDown)
     {
-        player.body.setVelocityX(-280);
+        player.body.setVelocityX(-480);
         player.anims.play('walk', true); // walk left
         player.flipX = true; // flip the sprite to the left
     }
     else if (cursors.right.isDown)
     {
-        player.body.setVelocityX(280);
+        player.body.setVelocityX(480);
         player.anims.play('walk', true);
         player.flipX = false; // use the original sprite looking to the right
     } else {
@@ -218,6 +218,8 @@ function waterdeath(sprite, tile) {
   lives = lives - 0.5;
   
   if(lives == 1){
+    score = score
+    highscore = highscore;
     this.scene.start('playGame');
   }
   if(lives == 2){
@@ -231,7 +233,6 @@ function waterdeath(sprite, tile) {
     highscore = highscore - 100;
     this.scene.start('deathGame');
   }
-
   player.disableBody(true, false);
   this.sound.play('deat', {
     loop:false
@@ -242,6 +243,6 @@ function waterdeath(sprite, tile) {
 
 // Next Scene Function
 function nextLevel(sprite) {
-  this.scene.start('deathGame');
+  this.scene.start('win');
   return false;
 }

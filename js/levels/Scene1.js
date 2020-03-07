@@ -19,11 +19,12 @@ class Scene1 extends Phaser.Scene {
     this.add.image(720, 300, 'bg');
     this.add.image(720, 300, 'title');
 
-    
 
     const helloButton = this.add.image(710, 500, 'start');
     helloButton.setInteractive();
     helloButton.on('pointerdown', () => {  
+      score = 0;
+      highscore = 0;
       this.scene.start("playGame1");
       lives = 3;
     });

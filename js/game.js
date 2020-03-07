@@ -9,7 +9,7 @@ var config = {
             debug: false
         }
     },
-  scene: [ Scene1, Scene2, Scene3, deathScreen]
+  scene: [ Scene1, Scene2, Scene3, win, deathScreen]
 }
 
 
@@ -29,6 +29,8 @@ var timee;
 var timeee;
 var livesText;
 //var lifeLostText;
+
+
 
 var tim;
 var highscore;
